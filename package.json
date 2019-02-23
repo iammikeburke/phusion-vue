@@ -1,0 +1,24 @@
+{
+	"name": "phusion-vue",
+	"version": "1.0.0",
+	"scripts": {
+		"test": "jest"
+	},
+	"dependencies": {
+		"@types/jest": "^24.0.3",
+		"@types/node": "^11.9.4",
+		"jest": "^24.1.0",
+		"json-loader": "^0.5.7",
+		"phusion": "git+ssh://git@github.com/iammikeburke/phusion.git",
+		"raw-loader": "^1.0.0",
+		"ts-jest": "^24.0.0",
+		"ts-loader": "^5.3.3",
+		"typescript": "2.*.*",
+		"vinyl-named": "^1.1.0",
+		"vue": "^2.6.6",
+		"vue-router": "^3.0.2",
+		"webpack": "^4.29.5",
+		"webpack-node-externals": "^1.7.2",
+		"webpack-stream": "^5.2.1"
+	}
+}
