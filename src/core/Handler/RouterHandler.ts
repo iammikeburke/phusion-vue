@@ -48,6 +48,21 @@ export class RouterHandler extends PhusionAware
 		// For each routesConfig
 		for (let routeConfig of routesConfig)
 		{
+			let redirect = routeConfig['redirect'];
+			let path = routeConfig["path"];
+
+			// If it's a redirect
+			if (redirect)
+			{
+				let outputConfig = {
+					path: path,
+					redirect: redirect
+				};
+
+				outputRoutesVariable.push(outputConfig);
+				continue;
+			}
+
 			// Change component value to actual vue component
 			let component = routeConfig['component'];
 
@@ -66,7 +81,7 @@ export class RouterHandler extends PhusionAware
 			let vueComponent = viewHandler.getVueComponentByComponentClassName(componentName);
 
 			let outputConfig = {
-				"path": routeConfig["path"],
+				"path": path,
 				"component": vueComponent
 			};
 
