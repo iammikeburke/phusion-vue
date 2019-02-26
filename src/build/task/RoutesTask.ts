@@ -7,9 +7,8 @@ export class RoutesTask extends AbstractTask
 {
 	protected moduleContainer: ModuleContainer;
 
-	public run()
+	public exec()
 	{
-		this.logInfo('RoutesTask: started');
 		let taskConfig = this.getTaskConfig();
 
 		let projectRootDirPath = taskConfig.getByPath('projectRootDirPath');
@@ -97,10 +96,9 @@ export class RoutesTask extends AbstractTask
 
 		// Write file
 		fileSystemModule.writeFile(outputFilePath, fileContents);
-		this.logSuccess('RoutesTask: complete');
 	}
 
-	public getRequiredTaskConfigPaths(): Object
+	protected getRequiredTaskConfigPaths(): Object
 	{
 		return {
 			projectRootDirPath: "string",

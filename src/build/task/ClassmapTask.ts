@@ -6,9 +6,8 @@ export class ClassmapTask extends AbstractTask
 {
 	protected moduleContainer: ModuleContainer;
 
-	public run()
+	public exec()
 	{
-		this.logInfo('ClassmapTask: started');
 		let taskConfig = this.getTaskConfig();
 
 		let projectRoot = taskConfig.getByPath('projectRootDirPath');
@@ -19,11 +18,9 @@ export class ClassmapTask extends AbstractTask
 			.getModuleContainer()
 			.getAutoloadModule()
 			.generateClassmap(projectRoot, outputFilePath, groups);
-
-		this.logSuccess('ClassmapTask: complete');
 	}
 
-	public getRequiredTaskConfigPaths(): Object
+	protected getRequiredTaskConfigPaths(): Object
 	{
 		return {
 			projectRootDirPath: "string",

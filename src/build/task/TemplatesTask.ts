@@ -1,13 +1,14 @@
+
 import {AbstractTask} from 'phusion/src/build/task/AbstractTask';
 import {ModuleContainer} from "../module/ModuleContainer";
 
 export class TemplatesTask extends AbstractTask
 {
 	protected moduleContainer: ModuleContainer;
+	protected queueLimit: number = 1;
 
-	public run()
+	public exec()
 	{
-		this.logInfo('TemplatesTask: started');
 		let taskConfig = this.getTaskConfig();
 
 		// Task config values
@@ -68,8 +69,6 @@ export class TemplatesTask extends AbstractTask
 		let fileContents = '\nmodule.exports = ' + jsonString + ';\n';
 
 		fileSystemModule.writeFile(outputFilePath, fileContents);
-
-		this.logSuccess('TemplatesTask: complete');
 	}
 
 	public getRequiredTaskConfigPaths(): Object

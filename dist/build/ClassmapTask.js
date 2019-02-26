@@ -2665,6 +2665,9 @@ var ModuleContainer_1 = __webpack_require__(/*! ../module/ModuleContainer */ "./
 var AbstractTask = /** @class */ (function () {
     function AbstractTask(taskConfig) {
         if (taskConfig === void 0) { taskConfig = {}; }
+        this.running = false;
+        this.queued = 0;
+        this.queueLimit = 0;
         // Get default task config
         var defaultConfig = this.getDefaultTaskConfig();
         var configModule = this
@@ -2676,6 +2679,23 @@ var AbstractTask = /** @class */ (function () {
         this.taskConfig = configModule.toConfig(mergedConfigObject);
         this.validateTaskConfig();
     }
+    AbstractTask.prototype.run = function () {
+        // If task is already running
+        if (this.running) {
+            // Queue it up
+            this.queue();
+            return;
+        }
+        var taskName = this.constructor['name'];
+        // Log task as running
+        this.running = true;
+        this.logInfo(taskName + ': started');
+        // Execute the task
+        this.exec();
+        this.running = false;
+        this.logInfo(taskName + ': finished');
+        this.shutdown();
+    };
     AbstractTask.prototype.getDefaultTaskConfig = function () {
         return {};
     };
@@ -2706,6 +2726,25 @@ var AbstractTask = /** @class */ (function () {
                 }
             }
         return this;
+    };
+    AbstractTask.prototype.queue = function () {
+        if (this.queued < this.queueLimit) {
+            this.queued++;
+        }
+        return this;
+    };
+    AbstractTask.prototype.shutdown = function () {
+        // Remove one from the queue
+        this.queued--;
+        // If there are tasks in the queue
+        if (this.queued > 0) {
+            // Run it
+            this.run();
+        }
+        return this;
+    };
+    AbstractTask.prototype.exec = function () {
+        throw new Error('exec() method must be implemented');
     };
     AbstractTask.prototype.logError = function (message) {
         this.getModuleContainer().getLogModule().error(message);
@@ -5108,8 +5147,7 @@ var ClassmapTask = /** @class */ (function (_super) {
     function ClassmapTask() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ClassmapTask.prototype.run = function () {
-        this.logInfo('ClassmapTask: started');
+    ClassmapTask.prototype.exec = function () {
         var taskConfig = this.getTaskConfig();
         var projectRoot = taskConfig.getByPath('projectRootDirPath');
         var outputFilePath = taskConfig.getByPath('outputFilePath');
@@ -5118,7 +5156,6 @@ var ClassmapTask = /** @class */ (function (_super) {
             .getModuleContainer()
             .getAutoloadModule()
             .generateClassmap(projectRoot, outputFilePath, groups);
-        this.logSuccess('ClassmapTask: complete');
     };
     ClassmapTask.prototype.getRequiredTaskConfigPaths = function () {
         return {

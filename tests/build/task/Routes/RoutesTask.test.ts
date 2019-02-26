@@ -1,5 +1,5 @@
 
-import {ConfigMergeTask} from 'phusion/src/build/task/ConfigMerge/ConfigMergeTask';
+import {ConfigTask} from 'phusion/src/build/task/ConfigTask';
 import {ClassmapTask} from '../../../../src/build/task/ClassmapTask';
 import {RoutesTask} from '../../../../src/build/task/RoutesTask';
 import {ModuleContainer} from "../../../../src/build/module/ModuleContainer";
@@ -34,7 +34,7 @@ describe('RoutesTask', () =>
 		 * Build Config
 		 */
 
-		let configTask = new ConfigMergeTask(
+		let configTask = new ConfigTask(
 			{
 				configDirPath: config_configDirPath,
 				outputFilePath: config_outputFilePath,
