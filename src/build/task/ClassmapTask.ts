@@ -5,6 +5,7 @@ import {ModuleContainer} from "../module/ModuleContainer";
 export class ClassmapTask extends AbstractTask
 {
 	protected moduleContainer: ModuleContainer;
+	protected queueLimit: number = 1;
 
 	public exec()
 	{

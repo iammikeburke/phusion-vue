@@ -5145,7 +5145,9 @@ var ModuleContainer_1 = __webpack_require__(/*! ../module/ModuleContainer */ "./
 var ClassmapTask = /** @class */ (function (_super) {
     __extends(ClassmapTask, _super);
     function ClassmapTask() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.queueLimit = 1;
+        return _this;
     }
     ClassmapTask.prototype.exec = function () {
         var taskConfig = this.getTaskConfig();

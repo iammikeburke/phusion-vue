@@ -5146,7 +5146,9 @@ var Config_1 = __webpack_require__(/*! phusion/src/build/module/Config/Entity/Co
 var RoutesTask = /** @class */ (function (_super) {
     __extends(RoutesTask, _super);
     function RoutesTask() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.queueLimit = 1;
+        return _this;
     }
     RoutesTask.prototype.exec = function () {
         var taskConfig = this.getTaskConfig();

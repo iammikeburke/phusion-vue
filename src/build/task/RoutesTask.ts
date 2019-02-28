@@ -6,6 +6,7 @@ import {Config} from 'phusion/src/build/module/Config/Entity/Config';
 export class RoutesTask extends AbstractTask
 {
 	protected moduleContainer: ModuleContainer;
+	protected queueLimit: number = 1;
 
 	public exec()
 	{
