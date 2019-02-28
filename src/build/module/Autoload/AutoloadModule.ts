@@ -99,7 +99,7 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 		classmapString = this.removeQuotesFromClassNames(classmap, classmapString);
 
 		// Remove filename to get outputDirPath
-		let outputDirPath = outputFilePath.replace(/\/[^\/]+\..+$/, '');
+		let outputDirPath = outputFilePath.replace(/\/[^\/]+\..[^\.]$/, '');
 
 		// Add import statement block
 		let importStatementBlockAsString = this.getImportStatementBlock(classPathMap, projectRootDirPath, outputDirPath);

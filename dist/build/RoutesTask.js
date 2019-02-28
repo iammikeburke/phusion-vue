@@ -4997,7 +4997,7 @@ var AutoloadModule = /** @class */ (function (_super) {
         // Remove quotes from class names
         classmapString = this.removeQuotesFromClassNames(classmap, classmapString);
         // Remove filename to get outputDirPath
-        var outputDirPath = outputFilePath.replace(/\/[^\/]+\..+$/, '');
+        var outputDirPath = outputFilePath.replace(/\/[^\/]+\..[^\.]$/, '');
         // Add import statement block
         var importStatementBlockAsString = this.getImportStatementBlock(classPathMap, projectRootDirPath, outputDirPath);
         var fileContents = importStatementBlockAsString + '\n' + 'module.exports = ' + classmapString + ';\n';
