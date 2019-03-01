@@ -1,7 +1,7 @@
 
 export interface AutoloadModuleInterface
 {
-	generateClassmap(projectRootDirPath: string, outputFilePath: string, groups: Object, ignorePatterns?: Array<RegExp>): boolean;
+	generateClassmap(projectRootDirPath: string, outputFilePath: string, groups: Object, ignorePatterns?: Array<RegExp>): number;
 
 	getImportStatementBlock(classPathMap: Object, projectRootAbsolutePath: string, importFromDirPath: string): string;
 

@@ -2408,29 +2408,32 @@ var FileSystemModule = /** @class */ (function (_super) {
         }
         return fileExists;
     };
-    FileSystemModule.prototype.forEachFileRecursively = function (srcDirPath, callback, ignorePatterns) {
+    FileSystemModule.prototype.forEachFileRecursively = function (srcDirPath, callback, ignorePatterns, iterationCount) {
         if (ignorePatterns === void 0) { ignorePatterns = []; }
+        if (iterationCount === void 0) { iterationCount = 0; }
         var itemsInScope = this.getDirContents(srcDirPath);
         for (var key in itemsInScope) {
             var fileName = itemsInScope[key];
             var fullFilePath = srcDirPath + '/' + fileName;
+            iterationCount++;
             // For each ignore pattern
             for (var key_1 in ignorePatterns) {
                 var pattern = ignorePatterns[key_1];
                 // If full file path matches
                 if (pattern.test(fullFilePath)) {
+                    console.log('Ignoring: ', fullFilePath);
                     // Ignore it and return
-                    return;
+                    return iterationCount;
                 }
             }
             if (this.isDirectory(fullFilePath)) {
-                this.forEachFileRecursively(fullFilePath, callback);
+                iterationCount = this.forEachFileRecursively(fullFilePath, callback, [], iterationCount);
             }
             else if (this.isFile(fullFilePath)) {
                 callback(fileName, fullFilePath);
             }
         }
-        return this;
+        return iterationCount;
     };
     FileSystemModule.prototype.getDirContents = function (absoluteDirPath) {
         var dirItems = this
@@ -4952,17 +4955,15 @@ var AutoloadModule = /** @class */ (function (_super) {
         var combinedClassmap = {};
         var classmap = {};
         var classPathMap = {};
-        var iterationCount = 0;
         // For each file recursively
-        fileSystemModule.forEachFileRecursively(projectRootDirPath, function (fileName, absoluteFilePath) {
-            iterationCount++;
+        var filesScanned = fileSystemModule.forEachFileRecursively(projectRootDirPath, function (fileName, absoluteFilePath) {
             // If node_modules, continue
             if (absoluteFilePath.indexOf('node_modules') !== -1) {
-                console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
+                // console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
                 return;
             }
             else {
-                console.log('Processing:' + absoluteFilePath);
+                // console.log('Processing:' + absoluteFilePath);
             }
             if (groups instanceof Config_1.Config) {
                 groups = groups.toObject();
@@ -5004,7 +5005,6 @@ var AutoloadModule = /** @class */ (function (_super) {
                 }
             }
         }, ignorePatterns);
-        console.log('iterationCount', iterationCount);
         /**
          * Write classmap file
          */
@@ -5031,7 +5031,7 @@ var AutoloadModule = /** @class */ (function (_super) {
         var pathMapFileContents = '\n' + 'module.exports = ' + pathMapString + ';\n';
         // Write classmap to output file
         fileSystemModule.writeFile(classPathMapOutputFilePath, pathMapFileContents);
-        return true;
+        return filesScanned;
     };
     AutoloadModule.prototype.getImportStatementBlock = function (classPathMap, projectRootAbsolutePath, importFromDirPath) {
         var importStatementTemplate = "const {{className}} = require(\"{relativePath}\");\n";
@@ -5173,10 +5173,11 @@ var ClassmapTask = /** @class */ (function (_super) {
         var outputFilePath = taskConfig.getByPath('outputFilePath');
         var groups = taskConfig.getByPath('groups');
         var ignoreDirs = taskConfig.getByPath('ignoreDirs');
-        this
+        var filesScanned = this
             .getModuleContainer()
             .getAutoloadModule()
             .generateClassmap(projectRoot, outputFilePath, groups, ignoreDirs);
+        this.logInfo(filesScanned + ' files scanned');
     };
     ClassmapTask.prototype.getRequiredTaskConfigPaths = function () {
         return {

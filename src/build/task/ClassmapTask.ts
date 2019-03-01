@@ -16,10 +16,12 @@ export class ClassmapTask extends AbstractTask
 		let groups = taskConfig.getByPath('groups');
 		let ignoreDirs = taskConfig.getByPath('ignoreDirs');
 
-		this
+		let filesScanned = this
 			.getModuleContainer()
 			.getAutoloadModule()
 			.generateClassmap(projectRoot, outputFilePath, groups, ignoreDirs);
+
+		this.logInfo(filesScanned + ' files scanned');
 	}
 
 	protected getRequiredTaskConfigPaths(): Object

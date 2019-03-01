@@ -7,30 +7,27 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 {
 	protected nodeJsPath;
 
-	public generateClassmap(projectRootDirPath: string, outputFilePath: string, groups: Object, ignorePatterns: Array<RegExp> = []): boolean
+	public generateClassmap(projectRootDirPath: string, outputFilePath: string, groups: Object, ignorePatterns: Array<RegExp> = []): number
 	{
 		let fileSystemModule = this.getModuleContainer().getFileSystemModule();
 		let combinedClassmap = {};
 		let classmap = {};
 		let classPathMap = {};
 
-		let iterationCount = 0;
-
 		// For each file recursively
-		fileSystemModule.forEachFileRecursively(
+		let filesScanned = fileSystemModule.forEachFileRecursively(
 			projectRootDirPath,
 			function(fileName: string, absoluteFilePath: string)
 			{
-				iterationCount++;
 				// If node_modules, continue
 				if (absoluteFilePath.indexOf('node_modules') !== -1)
 				{
-					console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
+					// console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
 					return;
 				}
 				else
 				{
-					console.log('Processing:' + absoluteFilePath);
+					// console.log('Processing:' + absoluteFilePath);
 				}
 
 				if (groups instanceof Config)
@@ -94,8 +91,6 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 			ignorePatterns
 		);
 
-		console.log('iterationCount', iterationCount);
-
 		/**
 		 * Write classmap file
 		 */
@@ -136,7 +131,7 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 		// Write classmap to output file
 		fileSystemModule.writeFile(classPathMapOutputFilePath, pathMapFileContents);
 
-		return true;
+		return filesScanned;
 	}
 
 	public getImportStatementBlock(classPathMap: Object, projectRootAbsolutePath: string, importFromDirPath: string): string
