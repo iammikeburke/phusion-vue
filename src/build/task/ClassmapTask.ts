@@ -14,11 +14,12 @@ export class ClassmapTask extends AbstractTask
 		let projectRoot = taskConfig.getByPath('projectRootDirPath');
 		let outputFilePath = taskConfig.getByPath('outputFilePath');
 		let groups = taskConfig.getByPath('groups');
+		let ignoreDirs = taskConfig.getByPath('ignoreDirs');
 
 		this
 			.getModuleContainer()
 			.getAutoloadModule()
-			.generateClassmap(projectRoot, outputFilePath, groups);
+			.generateClassmap(projectRoot, outputFilePath, groups, ignoreDirs);
 	}
 
 	protected getRequiredTaskConfigPaths(): Object
@@ -39,7 +40,10 @@ export class ClassmapTask extends AbstractTask
 			outputFilePath: cwd + '/cache/classmap.js',
 			groups: {
 				"component": '^(?!Abstract|abstract.*$)[^\\s]*[Cc]omponent\\.ts$' // All TS classes that end in the word "Component" and do not start with the word "Abstract"
-			}
+			},
+			ignoreDirs: [
+				/node_modules/
+			]
 		};
 	}
 

@@ -7,22 +7,30 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 {
 	protected nodeJsPath;
 
-	public generateClassmap(projectRootDirPath: string, outputFilePath: string, groups: Object): boolean
+	public generateClassmap(projectRootDirPath: string, outputFilePath: string, groups: Object, ignorePatterns: Array<RegExp> = []): boolean
 	{
 		let fileSystemModule = this.getModuleContainer().getFileSystemModule();
 		let combinedClassmap = {};
 		let classmap = {};
 		let classPathMap = {};
 
+		let iterationCount = 0;
+
 		// For each file recursively
 		fileSystemModule.forEachFileRecursively(
 			projectRootDirPath,
 			function(fileName: string, absoluteFilePath: string)
 			{
+				iterationCount++;
 				// If node_modules, continue
 				if (absoluteFilePath.indexOf('node_modules') !== -1)
 				{
+					console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
 					return;
+				}
+				else
+				{
+					console.log('Processing:' + absoluteFilePath);
 				}
 
 				if (groups instanceof Config)
@@ -82,8 +90,11 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 						};
 					}
 				}
-			}
+			},
+			ignorePatterns
 		);
+
+		console.log('iterationCount', iterationCount);
 
 		/**
 		 * Write classmap file
@@ -151,31 +162,31 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 			// For each class in the group
 			for (let className in groupClassmap)
 				if (groupClassmap.hasOwnProperty(className))
-			{
-				// If import statement already added for this class
-				if (classesAddedToImportBlock.indexOf(className) !== -1)
 				{
-					continue;
-				}
+					// If import statement already added for this class
+					if (classesAddedToImportBlock.indexOf(className) !== -1)
+					{
+						continue;
+					}
 
-				let relativePathFromRoot = groupClassmap[className];
+					let relativePathFromRoot = groupClassmap[className];
 
-				let importPath = relativePathFromRoot
+					let importPath = relativePathFromRoot
 					// Replace {src} placeholder
-					.replace('{src}', srcReplacement)
-					// Remove file extension
-					.replace(/\.[^.]+$/, '');
+						.replace('{src}', srcReplacement)
+						// Remove file extension
+						.replace(/\.[^.]+$/, '');
 
-				let importStatement = importStatementTemplate;
+					let importStatement = importStatementTemplate;
 
-				importStatement = importStatement
-					.replace('{className}', className)
-					.replace('{relativePath}', importPath);
+					importStatement = importStatement
+						.replace('{className}', className)
+						.replace('{relativePath}', importPath);
 
-				importStatementBlock+= importStatement;
+					importStatementBlock+= importStatement;
 
-				classesAddedToImportBlock.push(className);
-			}
+					classesAddedToImportBlock.push(className);
+				}
 		}
 
 		return importStatementBlock;

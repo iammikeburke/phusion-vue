@@ -2408,11 +2408,21 @@ var FileSystemModule = /** @class */ (function (_super) {
         }
         return fileExists;
     };
-    FileSystemModule.prototype.forEachFileRecursively = function (srcDirPath, callback) {
+    FileSystemModule.prototype.forEachFileRecursively = function (srcDirPath, callback, ignorePatterns) {
+        if (ignorePatterns === void 0) { ignorePatterns = []; }
         var itemsInScope = this.getDirContents(srcDirPath);
         for (var key in itemsInScope) {
             var fileName = itemsInScope[key];
             var fullFilePath = srcDirPath + '/' + fileName;
+            // For each ignore pattern
+            for (var key_1 in ignorePatterns) {
+                var pattern = ignorePatterns[key_1];
+                // If full file path matches
+                if (pattern.test(fullFilePath)) {
+                    // Ignore it and return
+                    return;
+                }
+            }
             if (this.isDirectory(fullFilePath)) {
                 this.forEachFileRecursively(fullFilePath, callback);
             }
@@ -4936,16 +4946,23 @@ var AutoloadModule = /** @class */ (function (_super) {
     function AutoloadModule() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    AutoloadModule.prototype.generateClassmap = function (projectRootDirPath, outputFilePath, groups) {
+    AutoloadModule.prototype.generateClassmap = function (projectRootDirPath, outputFilePath, groups, ignorePatterns) {
+        if (ignorePatterns === void 0) { ignorePatterns = []; }
         var fileSystemModule = this.getModuleContainer().getFileSystemModule();
         var combinedClassmap = {};
         var classmap = {};
         var classPathMap = {};
+        var iterationCount = 0;
         // For each file recursively
         fileSystemModule.forEachFileRecursively(projectRootDirPath, function (fileName, absoluteFilePath) {
+            iterationCount++;
             // If node_modules, continue
             if (absoluteFilePath.indexOf('node_modules') !== -1) {
+                console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
                 return;
+            }
+            else {
+                console.log('Processing:' + absoluteFilePath);
             }
             if (groups instanceof Config_1.Config) {
                 groups = groups.toObject();
@@ -4986,7 +5003,8 @@ var AutoloadModule = /** @class */ (function (_super) {
                     };
                 }
             }
-        });
+        }, ignorePatterns);
+        console.log('iterationCount', iterationCount);
         /**
          * Write classmap file
          */
@@ -5154,10 +5172,11 @@ var ClassmapTask = /** @class */ (function (_super) {
         var projectRoot = taskConfig.getByPath('projectRootDirPath');
         var outputFilePath = taskConfig.getByPath('outputFilePath');
         var groups = taskConfig.getByPath('groups');
+        var ignoreDirs = taskConfig.getByPath('ignoreDirs');
         this
             .getModuleContainer()
             .getAutoloadModule()
-            .generateClassmap(projectRoot, outputFilePath, groups);
+            .generateClassmap(projectRoot, outputFilePath, groups, ignoreDirs);
     };
     ClassmapTask.prototype.getRequiredTaskConfigPaths = function () {
         return {
@@ -5173,7 +5192,10 @@ var ClassmapTask = /** @class */ (function (_super) {
             outputFilePath: cwd + '/cache/classmap.js',
             groups: {
                 "component": '^(?!Abstract|abstract.*$)[^\\s]*[Cc]omponent\\.ts$' // All TS classes that end in the word "Component" and do not start with the word "Abstract"
-            }
+            },
+            ignoreDirs: [
+                /node_modules/
+            ]
         };
     };
     ClassmapTask.prototype.getModuleContainer = function () {
