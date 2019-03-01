@@ -2421,7 +2421,6 @@ var FileSystemModule = /** @class */ (function (_super) {
                 var pattern = ignorePatterns[key_1];
                 // If full file path matches
                 if (pattern.test(fullFilePath)) {
-                    console.log('Ignoring: ', fullFilePath);
                     // Ignore it and return
                     return iterationCount;
                 }
@@ -5177,7 +5176,7 @@ var ClassmapTask = /** @class */ (function (_super) {
             .getModuleContainer()
             .getAutoloadModule()
             .generateClassmap(projectRoot, outputFilePath, groups, ignoreDirs);
-        this.logInfo(filesScanned + ' files scanned');
+        this.logInfo(this.constructor['name'] + ': ' + filesScanned + ' files scanned');
     };
     ClassmapTask.prototype.getRequiredTaskConfigPaths = function () {
         return {

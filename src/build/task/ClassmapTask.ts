@@ -21,7 +21,7 @@ export class ClassmapTask extends AbstractTask
 			.getAutoloadModule()
 			.generateClassmap(projectRoot, outputFilePath, groups, ignoreDirs);
 
-		this.logInfo(filesScanned + ' files scanned');
+		this.logInfo(this.constructor['name'] + ': ' + filesScanned + ' files scanned');
 	}
 
 	protected getRequiredTaskConfigPaths(): Object

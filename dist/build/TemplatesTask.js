@@ -2421,7 +2421,6 @@ var FileSystemModule = /** @class */ (function (_super) {
                 var pattern = ignorePatterns[key_1];
                 // If full file path matches
                 if (pattern.test(fullFilePath)) {
-                    console.log('Ignoring: ', fullFilePath);
                     // Ignore it and return
                     return iterationCount;
                 }
