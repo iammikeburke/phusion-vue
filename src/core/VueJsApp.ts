@@ -1,6 +1,5 @@
 
 import {PhusionAware} from "phusion/src/core/module/Phusion/PhusionAware";
-import {PhusionInterface} from "phusion/src/core/PhusionInterface";
 import {RouterHandler} from "./Handler/RouterHandler";
 import {ViewHandler} from "./Handler/ViewHandler";
 
@@ -10,7 +9,7 @@ export class VueJsApp extends PhusionAware
 	private viewHandler: ViewHandler;
 	private classmap: Object;
 
-	public constructor(phusion: PhusionInterface)
+	public constructor(phusion)
 	{
 		super();
 		phusion.setApp(this);
