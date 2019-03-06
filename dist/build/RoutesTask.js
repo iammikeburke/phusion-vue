@@ -2415,20 +2415,25 @@ var FileSystemModule = /** @class */ (function (_super) {
         for (var key in itemsInScope) {
             var fileName = itemsInScope[key];
             var fullFilePath = srcDirPath + '/' + fileName;
-            iterationCount++;
+            var shouldContinue = false;
             // For each ignore pattern
             for (var key_1 in ignorePatterns) {
                 var pattern = ignorePatterns[key_1];
                 // If full file path matches
                 if (pattern.test(fullFilePath)) {
                     // Ignore it and return
-                    return iterationCount;
+                    shouldContinue = true;
+                    break;
                 }
+            }
+            if (shouldContinue) {
+                continue;
             }
             if (this.isDirectory(fullFilePath)) {
                 iterationCount = this.forEachFileRecursively(fullFilePath, callback, [], iterationCount);
             }
             else if (this.isFile(fullFilePath)) {
+                iterationCount++;
                 callback(fileName, fullFilePath);
             }
         }
@@ -4956,14 +4961,6 @@ var AutoloadModule = /** @class */ (function (_super) {
         var classPathMap = {};
         // For each file recursively
         var filesScanned = fileSystemModule.forEachFileRecursively(projectRootDirPath, function (fileName, absoluteFilePath) {
-            // If node_modules, continue
-            if (absoluteFilePath.indexOf('node_modules') !== -1) {
-                // console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
-                return;
-            }
-            else {
-                // console.log('Processing:' + absoluteFilePath);
-            }
             if (groups instanceof Config_1.Config) {
                 groups = groups.toObject();
             }
