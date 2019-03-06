@@ -19,17 +19,6 @@ export class AutoloadModule extends AbstractModule implements AutoloadModuleInte
 			projectRootDirPath,
 			function(fileName: string, absoluteFilePath: string)
 			{
-				// If node_modules, continue
-				if (absoluteFilePath.indexOf('node_modules') !== -1)
-				{
-					// console.log('*** NODE_MODULES: ' + absoluteFilePath + ' ***');
-					return;
-				}
-				else
-				{
-					// console.log('Processing:' + absoluteFilePath);
-				}
-
 				if (groups instanceof Config)
 				{
 					groups = groups.toObject();
