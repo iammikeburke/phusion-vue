@@ -194,7 +194,14 @@ export class ViewHandler extends PhusionAware
 
 		componentObject['data'] = function()
 		{
-			return dataObject;
+			let newObject = {};
+
+			for (let key in dataObject)
+			{
+				newObject[key] = dataObject[key];
+			}
+
+			return newObject;
 		};
 
 		componentObject['methods'] = methodsObject;
