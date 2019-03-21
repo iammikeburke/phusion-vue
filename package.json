@@ -9,7 +9,7 @@
 		"@types/node": "^11.9.4",
 		"jest": "^24.1.0",
 		"json-loader": "^0.5.7",
-		"phusion": "git://github.com/iammikeburke/phusion.git",
+		"phusion": "git://github.com/ieatstickers/phusion.git",
 		"raw-loader": "^1.0.0",
 		"ts-jest": "^24.0.0",
 		"ts-loader": "^5.3.3",

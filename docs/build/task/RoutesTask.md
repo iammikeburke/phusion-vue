@@ -38,7 +38,7 @@ Defaults to `process.cwd() + '/cache/routes.js`;
 
 #### configFilePath: string
 
-File path to generated config file from Phusion's [`ConfigTask`](https://github.com/iammikeburke/phusion). 
+File path to generated config file from Phusion's [`ConfigTask`](https://github.com/ieatstickers/phusion). 
 
 Defaults to `process.cwd() + '/cache/config.js`;
 

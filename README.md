@@ -1,10 +1,10 @@
 # phusion-vue
 
-A lightweight VueJS wrapper written in TypeScript. Powered by the [Phusion](https://github.com/iammikeburke/phusion) library.
+A lightweight VueJS wrapper written in TypeScript. Powered by the [Phusion](https://github.com/ieatstickers/phusion) library.
 
 ### Getting Started
 
-To see the recommended way to set up a `phusion-vue` project, see the [`phusion-vue-skeleton`](https://github.com/iammikeburke/phusion-vue-skeleton) repo, which includes a everything you need to start building an SPA including a gulpfile with tasks pre-written for scss compilation, JavaScript concatenation and uglification, webpack builds as well as the custom tasks used from `phusion-vue` and [`phusion`](https://github.com/iammikeburke/phusion). 
+To see the recommended way to set up a `phusion-vue` project, see the [`phusion-vue-skeleton`](https://github.com/ieatstickers/phusion-vue-skeleton) repo, which includes a everything you need to start building an SPA including a gulpfile with tasks pre-written for scss compilation, JavaScript concatenation and uglification, webpack builds as well as the custom tasks used from `phusion-vue` and [`phusion`](https://github.com/ieatstickers/phusion). 
 
 ### Components
 
@@ -121,4 +121,4 @@ To do most of the heavy lifting, a handful of custom build tasks have been writt
 - [TemplatesTask](docs/build/task/TemplatesTask.md)
 - [RoutesTask](docs/build/task/RoutesTask.md)
 
-For examples of how these are added to Gulp, see the [`phusion-vue-skeleton`](https://github.com/iammikeburke/phusion-vue-skeleton) repository.
+For examples of how these are added to Gulp, see the [`phusion-vue-skeleton`](https://github.com/ieatstickers/phusion-vue-skeleton) repository.
